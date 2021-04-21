@@ -37,7 +37,13 @@ public class CardImageLibrary
 	//  Methods ---------------------------------------
     public Sprite GetSprite(Card card)
     {
-        string filePath = "Art/CardUp/" + RANK[(int)card.Rank] + PATTERN[(int)card.Pattern];
+        string filePath;
+        if (card != null)
+        {
+            filePath = "Art/CardUp/" + RANK[(int)card.Rank] + PATTERN[(int)card.Pattern];
+        }
+        else filePath = "Art/Blank";
+
         Debug.Log(filePath);
         return Resources.Load<Sprite>(filePath);
     }

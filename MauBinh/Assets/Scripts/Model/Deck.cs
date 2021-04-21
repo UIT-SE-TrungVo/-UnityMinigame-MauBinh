@@ -38,7 +38,7 @@ public class Deck
 
 
 	//  Methods ---------------------------------------
-	private void Reset()
+	public void Reset()
     {
 		_cardPile.Clear();
 		//Foreach pair (Pattern, Rank) --> Create the card
@@ -49,11 +49,18 @@ public class Deck
 				AddACardToDeck(new Card(pattern, rank));
 			}
 		}
+		Debug.Log("The Deck has " + _cardPile.Count + "card(s)");
 	}
 
 	private Card GetRandomCardInDeck()
 	{
-		return _cardPile.ElementAt(new System.Random().Next(_cardPile.Count));
+		if (_cardPile.Count <= 0) return null;
+
+		//complicated random mechanic
+		int r1 = (new System.Random().Next(0, _cardPile.Count));
+		int r2 = (new System.Random().Next(0, _cardPile.Count));
+
+		return _cardPile.ElementAt((r1 * r2)  % _cardPile.Count);
 	}
 
 	private void AddACardToDeck(Card card)
@@ -68,11 +75,20 @@ public class Deck
 
 	private void AddACardToPlayerHand(Hand hand, Card card)
 	{
-		if (_cardPile.Contains(card) && _playerHands.Contains(hand))
+		if (_cardPile.Contains(card) && _playerHands.Contains(hand) && !hand.AllCards.Contains(card))
         {
 			RemoveACardFromDeck(card);
 			hand.AddACard(card);
         }
+	}
+
+	public void TakeCardFromPlayerHand(Hand hand, Card card)
+	{
+		if (_playerHands.Contains(hand) && hand.AllCards.Contains(card) && !_cardPile.Contains(card))
+		{
+			hand.RemoveACard(card);
+			AddACardToDeck(card);
+		}
 	}
 
 	public void AddHand(Hand hand)
@@ -83,7 +99,7 @@ public class Deck
 
 	public void AddNumberOfCardsToPlayerHand(Hand hand, int numberOfCards)
     {
-		for (int i = 0; i < numberOfCards; i++)
+		for (int i = 0; i < Mathf.Min(numberOfCards, _cardPile.Count) ; i++)
         {
 			AddACardToPlayerHand(hand, GetRandomCardInDeck());
         }

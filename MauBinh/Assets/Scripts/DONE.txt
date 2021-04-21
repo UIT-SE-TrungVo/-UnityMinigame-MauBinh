@@ -1,0 +1,12 @@
+1/ Code Structure
+	View <>----> Model
+
+	View: Monobehaviour
+	Model: SyncObject
+
+	Monobehaviour will Update when SyncObject.NeedSync == true
+
+2/ Done features
+- Random card mechanism
+- Cards on hand
+- Click -> banish card	

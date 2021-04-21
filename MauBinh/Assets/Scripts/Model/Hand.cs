@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Represent a Hand of a Player, holding cards that can be used
 /// </summary>
-public class Hand
+public class Hand : SyncObject
 {
 	//  Events ----------------------------------------
 
@@ -16,26 +16,30 @@ public class Hand
 
 	//  Fields ----------------------------------------
 	private HashSet<Card> _cards = new HashSet<Card>();
-	private int _maxHand = 13;
+	private int _maxHand;
 
 
 	//  Initialization --------------------------------
-	public Hand()
+	public Hand(int maxHand)
     {
 		_cards.Clear();
 		Deck.Instance.AddHand(this);
-		Deck.Instance.AddNumberOfCardsToPlayerHand(this, 13);
+		Deck.Instance.AddNumberOfCardsToPlayerHand(this, maxHand);
+		_maxHand = maxHand;
+		RequestSync();
     }
 
 	//  Methods ---------------------------------------
 	public void AddACard(Card card)
     {
 		_cards.Add(card);
+		RequestSync();
     }
 
 	public void RemoveACard(Card card)
 	{
 		_cards.Remove(card);
+		RequestSync();
 	}
 
 
